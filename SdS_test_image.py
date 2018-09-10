@@ -59,6 +59,7 @@ io.imshow(image_mel2)
 plt.title('mel2')
 ##colormap
 ##gray
+plt.show()
 
 x1 = x1 - np.mean(x1) # espérance nulle
 x2 = x2 - np.mean(x2)
