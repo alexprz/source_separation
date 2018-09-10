@@ -54,4 +54,3 @@ def compute_gradient(B,y1,y2,x1,x2,lam1):
     m_y2_x2 = np.mean(temp2 * x2)
     pen = np.array([[m_y1_x1, m_y1_x2], [m_y2_x1, m_y2_x2]])
     return(np.dot(np.array([[M_Psi11, M_Psi12],[M_Psi21, M_Psi22]]),np.transpose(B))-np.eye(2) + np.dot(np.dot(lam1,pen),np.transpose(B)))
-
