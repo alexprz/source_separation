@@ -2,11 +2,12 @@ import numpy as np
 ##from skimage import pydoc_data
 from skimage import io
 from skimage import color
+from path import *
 
 def gene_image():
 
     ###noir et blanc
-    barbara_image = io.imread('barbara.png')
+    barbara_image = io.imread(pathBarbara)
     nb_lig, nb_col  = barbara_image.shape
     N = nb_col*nb_lig
     Grey = barbara_image
@@ -15,7 +16,7 @@ def gene_image():
     Grey1 = np.array([(g-np.min(Grey1))/(np.max(Grey1)-np.min(Grey1)) for g in Grey1])
 
     ###couleur
-    lena_image = io.imread('lena.png')
+    lena_image = io.imread(pathLena)
     lena_image_grey = color.rgb2grey(lena_image)
     R, G, B = np.reshape(lena_image[:,:,0], (N,1)), np.reshape(lena_image[:,:,1], (N,1)), np.reshape(lena_image[:,:,2], (N,1))
     R, G, B = R/255, G/255, B/255
@@ -24,6 +25,3 @@ def gene_image():
     return(Grey1, Grey2, nb_lig, nb_col, barbara_image, lena_image_grey)
 
 gene_image()
-
-
-
