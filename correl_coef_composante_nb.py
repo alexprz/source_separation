@@ -6,14 +6,8 @@ def correl_coef_composante_nb(im1_R,im2_R):
     moy_2R = np.mean(im2_R)
 
     Mat_cor_R = np.zeros((2,2))
-<<<<<<< HEAD
     Mat_cor_G = np.zeros((2,2)) # Ces deux lignes sont
     Mat_cor_B = np.zeros((2,2)) # inutiles en noir et blanc, on utilise que 'R'
-=======
-    Mat_cor_G = np.zeros((2,2))
-    Mat_cor_B = np.zeros((2,2))
-
->>>>>>> e9917696e6896230d304f1d95d316702b4d0e0ad
 
     ec_1R = np.std(im1_R)
     ec_2R = np.std(im2_R)

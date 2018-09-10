@@ -35,6 +35,7 @@ plt.figure(1)
 io.imshow(image_source1)
 plt.title('sep1')
 plt.show()
+plt.close()
 
 ## Je sais pas quoi faire avec ces trucs là
 #colormap
