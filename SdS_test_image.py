@@ -17,10 +17,10 @@ s1 = s1/np.std(s1) # on ramène s1 et s2 à une norme de valeur 1
 s2 = s2/np.std(s2)
 x1_R = s1
 x2_R = s2
-A11 = 0.6 # coefficients de mélange
-A12 = 0.4
-A21 = 0.4
-A22 = 0.6
+A11 = 0.55 # coefficients de mélange
+A12 = 0.45
+A21 = 0.45
+A22 = 0.55
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
@@ -70,7 +70,7 @@ x2 = x2 / np.std(x2)
 
 print('l algo tourne.......')
 
-nb_iter = 500
+nb_iter = 1000
 
 B = np.eye(2) # Initialisation de la matrice de separation
 
@@ -84,25 +84,39 @@ y2=x2
 
 indice = 1 # compteur d'affichage
 
+# std1 = np.std(y1)
+# std2 = np.std(y2)
 
-
-for i in range(1,nb_iter):
+for i in range(nb_iter+1):
     DJ = gr.compute_gradient(B,y1,y2,x1,x2,lambda0)
 
     B=B-mu*DJ # mise a jour de la matrice de separation
+    # B[0,0] /= std1
+    # B[0,1] /= std1
+    #
+    # B[1,0] /= std2
+    # B[1,1] /= std2
+
 
     y1=B[0,0]*x1+B[0,1]*x2 # mise a jour d'une estimation des sources separees (approximation des sources avant melange)
     y2=B[1,1]*x2+B[1,0]*x1
+
+    # std1 = np.std(y1)
+    # std2 = np.std(y2)
+    # y1 = y1/std1
+    # y2 = y2/std2
 
     y1 = y1-np.mean(y1)
     y2 = y2-np.mean(y2)
 
     plt.close() #Affichage
     if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
-        indice += indice
+        indice += 1
         print('je reconstruis les images separees......')
         yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))*255
         yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))*255
+        print(np.std(y1))
+        print(np.std(y2))
         image_sep1, image_sep2 = ri.recons_images_test_nb(yy1,yy2,nb_lign,nb_col)
         plt.figure(5)
         io.imshow(image_sep1)
@@ -124,3 +138,5 @@ for i in range(1,nb_iter):
 
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
         plt.pause(5)
+        # Afficher matrice corr à chaque étape
+        print(Mat_sep_cor)
