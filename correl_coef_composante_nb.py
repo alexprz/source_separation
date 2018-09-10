@@ -23,4 +23,4 @@ def correl_coef_composante_nb(im1_R,im2_R):
             prod_term = [(ima_R[i,k] - moy_R[i])*(ima_R[j,k] - moy_R[j]) for k in range(N)] # cette partie remplace le produit terme à terme de Matlab
             Mat_cor_R[i,j] = (1/(N*ec_R[i]*ec_R[j]))*np.sum(prod_term)
 
-    return(Mat_cor_R)
+    return(Mat_cor_R/256)
