@@ -2,6 +2,9 @@ import numpy as np
 from skimage import io
 import matplotlib.pyplot as plt
 import gene_image as gi
+import gradient as gr
+import correl_coef_composante_nb as cc
+import recons_images_test_nb as ri
 
 print('je genere puis concatene les images en vecteur .....')
 
