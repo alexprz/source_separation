@@ -25,5 +25,3 @@ def gene_image():
     Grey2 = np.array([(g-np.min(Grey2))/(np.max(Grey2)-np.min(Grey2)) for g in Grey2])
     Grey2 = np.reshape(Grey2, (nb_lig,nb_col))
     return(Grey1, Grey2, nb_lig, nb_col, barbara_image, lena_image_grey)
-
-gene_image()
