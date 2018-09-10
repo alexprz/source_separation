@@ -11,9 +11,10 @@ def gene_image():
     nb_lig, nb_col  = barbara_image.shape
     N = nb_col*nb_lig
     Grey = barbara_image
-    np.reshape(Grey, (N, 1))
+    Grey = np.reshape(Grey, (N, 1))
     Grey1 = Grey/255
     Grey1 = np.array([(g-np.min(Grey1))/(np.max(Grey1)-np.min(Grey1)) for g in Grey1])
+    Grey1 = np.reshape(Grey1, (nb_lig,nb_col))
 
     ###couleur
     lena_image = io.imread(pathLena)
@@ -22,6 +23,7 @@ def gene_image():
     R, G, B = R/255, G/255, B/255
     Grey2 = np.reshape(lena_image_grey, (N,1))/255
     Grey2 = np.array([(g-np.min(Grey2))/(np.max(Grey2)-np.min(Grey2)) for g in Grey2])
+    Grey2 = np.reshape(Grey2, (nb_lig,nb_col))
     return(Grey1, Grey2, nb_lig, nb_col, barbara_image, lena_image_grey)
 
 gene_image()
