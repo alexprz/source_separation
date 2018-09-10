@@ -31,8 +31,8 @@ def compute_gradient(B,y1,y2,x1,x2,lam1):
 
     P1 = np.array([0,1,2 * m_y1,3*(m_y1_2)])
     P2 = np.array([0,1,2 * m_y2,3 * (m_y2_2)])
-    w1 = np.dot(np.np.linalg.inv(M1), P1)
-    w2 = np.dot(np.np.linalg.inv(M2), P2)
+    w1 = np.dot(np.linalg.inv(M1), P1)
+    w2 = np.dot(np.linalg.inv(M2), P2)
 
     Psi_y1 = w1[0] + w1[1] * y1 + w1[2] * y1*y1 + w1[3] * y1*y1*y1
     Psi_y2 = w2[0] + w2[1] * y2 + w2[2] * y2*y2 + w2[3] * y2*y2*y2
