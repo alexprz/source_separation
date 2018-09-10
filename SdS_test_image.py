@@ -86,7 +86,7 @@ indice = 1 # compteur d'affichage
 
 
 
-for i in range(1,nb_iter):
+for i in range(nb_iter+1):
     DJ = gr.compute_gradient(B,y1,y2,x1,x2,lambda0)
 
     B=B-mu*DJ # mise a jour de la matrice de separation
@@ -99,7 +99,7 @@ for i in range(1,nb_iter):
 
     plt.close() #Affichage
     if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
-        indice += indice
+        indice += 1
         print('je reconstruis les images separees......')
         yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))*255
         yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))*255
@@ -117,10 +117,10 @@ for i in range(1,nb_iter):
         #gray
         plt.show() # remplace le drawnow (normalement)
 
-        [Mat_or_cor_source] = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
+        Mat_or_cor_source = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
         plt.pause(1)
 
-        [Mat_mel_cor] = cc.correl_coef_composante_nb(x1,x2) # Calcul de la correlation entre les sources melangees
+        Mat_mel_cor = cc.correl_coef_composante_nb(x1,x2) # Calcul de la correlation entre les sources melangees
 
-        [Mat_sep_cor] = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
+        Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
         plt.pause(5)
