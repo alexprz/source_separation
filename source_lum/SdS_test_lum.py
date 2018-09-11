@@ -32,8 +32,6 @@ print('je reconstruis les signaux de melanges......')
 xx1 = (x1 - np.min(x1)) / (np.max(x1) - np.min(x1))
 xx2 = (x2 - np.min(x2)) / (np.max(x2) - np.min(x2))
 
-
-
 plt.figure(1)
 plt.plot(X, source1)
 plt.title('source1')
@@ -72,7 +70,7 @@ x2 = x2 / np.std(x2)
 
 print('l algo tourne.......')
 
-nb_iter = 500
+nb_iter = 300
 
 B = np.eye(2) # Initialisation de la matrice de separation
 
@@ -115,8 +113,8 @@ for i in range(nb_iter+1):
     if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
         indice += 1
         print('je reconstruis les signaux separes......')
-        yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))*255
-        yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))*255
+        yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))
+        yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
         print(np.std(y1))
         print(np.std(y2))
         plt.figure(5)
@@ -143,7 +141,13 @@ for i in range(nb_iter+1):
         # Afficher matrice corr à chaque étape
         print(Mat_sep_cor)
 
+plt.figure(1)
 plt.subplot(1,2,1)
-plt.plot(yy1-source1)
+plt.plot(X, yy1, 'r')
+plt.plot(X, source1, 'b')
+# plt.title('Comparaison des signaux séparés et originaux 1')
 plt.subplot(1,2,2)
-plt.plot(yy2-source2)
+plt.plot(X, yy2, 'r')
+plt.plot(X, source2, 'b')
+# plt.title('Comparaison des signaux séparés et originaux 1')
+plt.show()
