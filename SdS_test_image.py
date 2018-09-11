@@ -76,7 +76,7 @@ B = np.eye(2) # Initialisation de la matrice de separation
 
 mu=0.01 #pas dans la descente du gradient
 
-lambda0 = 1. # hyperparametre : parametre de pénalisation : je cherche des sources ayant un ecart constant, ici = 1
+lambda0 = 0. # hyperparametre : parametre de pénalisation : je cherche des sources ayant un ecart constant, ici = 1
 # j'ai du l'appeler lambda0 car lambda est une fonction python
 
 y1=x1 # Je demarre avec mes sources melangees/observees
@@ -84,27 +84,27 @@ y2=x2
 
 indice = 1 # compteur d'affichage
 
-# std1 = np.std(y1)
-# std2 = np.std(y2)
+std1 = np.std(y1)
+std2 = np.std(y2)
 
 for i in range(nb_iter+1):
     DJ = gr.compute_gradient(B,y1,y2,x1,x2,lambda0)
 
     B=B-mu*DJ # mise a jour de la matrice de separation
-    # B[0,0] /= std1
-    # B[0,1] /= std1
-    #
-    # B[1,0] /= std2
-    # B[1,1] /= std2
+    B[0,0] /= std1
+    B[0,1] /= std1
+
+    B[1,0] /= std2
+    B[1,1] /= std2
 
 
     y1=B[0,0]*x1+B[0,1]*x2 # mise a jour d'une estimation des sources separees (approximation des sources avant melange)
     y2=B[1,1]*x2+B[1,0]*x1
 
-    # std1 = np.std(y1)
-    # std2 = np.std(y2)
-    # y1 = y1/std1
-    # y2 = y2/std2
+    std1 = np.std(y1)
+    std2 = np.std(y2)
+    y1 = y1/std1
+    y2 = y2/std2
 
     y1 = y1-np.mean(y1)
     y2 = y2-np.mean(y2)
