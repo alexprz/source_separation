@@ -20,10 +20,10 @@ s1 = s1/np.std(s1) # on ramène s1 et s2 à une norme de valeur 1
 s2 = s2/np.std(s2)
 x1_R = s1
 x2_R = s2
-A11 = 0.55 # coefficients de mélange
-A12 = 0.45
-A21 = 0.45
-A22 = 0.55
+A11 = 0.10 # coefficients de mélange
+A12 = 0.90
+A21 = 0.20
+A22 = 0.80
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
@@ -70,7 +70,7 @@ x2 = x2 / np.std(x2)
 
 print('l algo tourne.......')
 
-nb_iter = 300
+nb_iter = 500
 
 B = np.eye(2) # Initialisation de la matrice de separation
 
@@ -132,12 +132,10 @@ for i in range(nb_iter+1):
 
         Mat_or_cor_source = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
         print(Mat_or_cor_source)
-        plt.pause(1)
 
         Mat_mel_cor = cc.correl_coef_composante_nb(x1,x2) # Calcul de la correlation entre les sources melangees
 
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
-        plt.pause(5)
         # Afficher matrice corr à chaque étape
         print(Mat_sep_cor)
 
