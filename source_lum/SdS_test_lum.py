@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import gene_lum as gl
 import gradient as gr
 import correl_coef_composante_nb as cc
+import analyse as an
 
 print('je genere puis concatene les images en vecteur .....')
 
@@ -21,10 +22,10 @@ s2 = s2/np.std(s2)
 x1_R = s1
 x2_R = s2
 
-A11 = 0.90 # coefficients de mélange
-A12 = 0.10
-A21 = 0.80
-A22 = 0.20
+A11 = 0.44 # coefficients de mélange
+A12 = 0.56
+A21 = 0.4
+A22 = 0.6
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
@@ -157,4 +158,8 @@ plt.plot(X, yy2, 'r')
 plt.plot(X, source2, 'b')
 plt.plot(X, sortie_mel2, 'g')
 # plt.title('Comparaison des signaux séparés et originaux 1')
+print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(sortie_mel1)))
+print(an.compute_bin_correlation(an.getBinaries(yy2), an.getBinaries(sortie_mel2)))
+print(an.compute_bin_correlation(an.getBinaries(yy2), an.getBinaries(sortie_mel1)))
+print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(sortie_mel2)))
 plt.show()
