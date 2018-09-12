@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import gene_lum as gl
 import gradient as gr
 import correl_coef_composante_nb as cc
-import analyse as an
 
 print('je genere puis concatene les images en vecteur .....')
 
@@ -33,12 +32,6 @@ x2 = A21 * s1 + A22 * s2
 print('je reconstruis les signaux de melanges......')
 xx1 = (x1 - np.min(x1)) / (np.max(x1) - np.min(x1))
 xx2 = (x2 - np.min(x2)) / (np.max(x2) - np.min(x2))
-
-print(an.compute_bin_correlation(an.getBinaries(xx1), an.getBinaries(s1)))
-print(an.compute_bin_correlation(an.getBinaries(xx2), an.getBinaries(s2)))
-print(an.compute_bin_correlation(an.getBinaries(xx2), an.getBinaries(s1)))
-print(an.compute_bin_correlation(an.getBinaries(xx1), an.getBinaries(s2)))
-
 
 plt.figure(1)
 plt.plot(X, source1)
@@ -70,6 +63,8 @@ plt.title('mel2')
 ##gray
 plt.show()
 
+sortie_mel1, sortie_mel2 = xx1[:], xx2[:]
+
 x1 = x1 - np.mean(x1) # espérance nulle
 x2 = x2 - np.mean(x2)
 
@@ -78,7 +73,7 @@ x2 = x2 / np.std(x2)
 
 print('l algo tourne.......')
 
-nb_iter = 300
+nb_iter = 500
 
 B = np.eye(2) # Initialisation de la matrice de separation
 
@@ -123,8 +118,8 @@ for i in range(nb_iter+1):
         print('je reconstruis les signaux separes......')
         yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))
         yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
-        # print(np.std(y1))
-        # print(np.std(y2))
+        print(np.std(y1))
+        print(np.std(y2))
         plt.figure(5)
         plt.plot(X,yy1)
         plt.title('sep1')
@@ -149,20 +144,17 @@ for i in range(nb_iter+1):
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
 
         # Afficher matrice corr à chaque étape
-        # print(Mat_sep_cor)
-        print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(s1)))
-        print(an.compute_bin_correlation(an.getBinaries(yy2), an.getBinaries(s2)))
-        print(an.compute_bin_correlation(an.getBinaries(yy2), an.getBinaries(s1)))
-        print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(s2)))
-
+        print(Mat_sep_cor)
 
 plt.figure(1)
 plt.subplot(1,2,1)
 plt.plot(X, yy1, 'r')
 plt.plot(X, source1, 'b')
+plt.plot(X, sortie_mel1, 'g')
 # plt.title('Comparaison des signaux séparés et originaux 1')
 plt.subplot(1,2,2)
 plt.plot(X, yy2, 'r')
 plt.plot(X, source2, 'b')
+plt.plot(X, sortie_mel2, 'g')
 # plt.title('Comparaison des signaux séparés et originaux 1')
 plt.show()
