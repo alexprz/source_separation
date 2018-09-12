@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import gene_lum as gl
 import gradient as gr
 import correl_coef_composante_nb as cc
-import analyse as an
 
 print('je genere puis concatene les images en vecteur .....')
 
@@ -21,17 +20,10 @@ s1 = s1/np.std(s1) # on ramène s1 et s2 à une norme de valeur 1
 s2 = s2/np.std(s2)
 x1_R = s1
 x2_R = s2
-<<<<<<< HEAD
 A11 = 0.10 # coefficients de mélange
 A12 = 0.90
 A21 = 0.20
 A22 = 0.80
-=======
-A11 = 0.90 # coefficients de mélange
-A12 = 0.10
-A21 = 0.80
-A22 = 0.20
->>>>>>> 514e3593addd56c1f313192c473b56fa1800a161
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
@@ -39,12 +31,6 @@ x2 = A21 * s1 + A22 * s2
 print('je reconstruis les signaux de melanges......')
 xx1 = (x1 - np.min(x1)) / (np.max(x1) - np.min(x1))
 xx2 = (x2 - np.min(x2)) / (np.max(x2) - np.min(x2))
-
-print(an.compute_bin_correlation(an.getBinaries(xx1), an.getBinaries(s1)))
-print(an.compute_bin_correlation(an.getBinaries(xx2), an.getBinaries(s2)))
-print(an.compute_bin_correlation(an.getBinaries(xx2), an.getBinaries(s1)))
-print(an.compute_bin_correlation(an.getBinaries(xx1), an.getBinaries(s2)))
-
 
 plt.figure(1)
 plt.plot(X, source1)
@@ -75,6 +61,8 @@ plt.title('mel2')
 ##colormap
 ##gray
 plt.show()
+
+sortie_mel1, sortie_mel2 = xx1[:], xx2[:]
 
 x1 = x1 - np.mean(x1) # espérance nulle
 x2 = x2 - np.mean(x2)
@@ -129,8 +117,8 @@ for i in range(nb_iter+1):
         print('je reconstruis les signaux separes......')
         yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))
         yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
-        # print(np.std(y1))
-        # print(np.std(y2))
+        print(np.std(y1))
+        print(np.std(y2))
         plt.figure(5)
         plt.plot(X,yy1)
         plt.title('sep1')
@@ -145,35 +133,23 @@ for i in range(nb_iter+1):
         plt.show() # remplace le drawnow (normalement)
 
         Mat_or_cor_source = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
-<<<<<<< HEAD
         print(Mat_or_cor_source)
-=======
-        # print(Mat_or_cor_source)
-        # plt.pause(1)
->>>>>>> 514e3593addd56c1f313192c473b56fa1800a161
 
         Mat_mel_cor = cc.correl_coef_composante_nb(x1,x2) # Calcul de la correlation entre les sources melangees
 
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
-<<<<<<< HEAD
-=======
-        # plt.pause(5)
->>>>>>> 514e3593addd56c1f313192c473b56fa1800a161
         # Afficher matrice corr à chaque étape
-        # print(Mat_sep_cor)
-        print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(s1)))
-        print(an.compute_bin_correlation(an.getBinaries(yy2), an.getBinaries(s2)))
-        print(an.compute_bin_correlation(an.getBinaries(yy2), an.getBinaries(s1)))
-        print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(s2)))
-
+        print(Mat_sep_cor)
 
 plt.figure(1)
 plt.subplot(1,2,1)
 plt.plot(X, yy1, 'r')
 plt.plot(X, source1, 'b')
+plt.plot(X, sortie_mel1, 'g')
 # plt.title('Comparaison des signaux séparés et originaux 1')
 plt.subplot(1,2,2)
 plt.plot(X, yy2, 'r')
 plt.plot(X, source2, 'b')
+plt.plot(X, sortie_mel2, 'g')
 # plt.title('Comparaison des signaux séparés et originaux 1')
 plt.show()
