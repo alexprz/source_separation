@@ -21,6 +21,7 @@ s1 = s1/np.std(s1) # on ramène s1 et s2 à une norme de valeur 1
 s2 = s2/np.std(s2)
 x1_R = s1
 x2_R = s2
+
 A11 = 0.90 # coefficients de mélange
 A12 = 0.10
 A21 = 0.80
@@ -138,13 +139,15 @@ for i in range(nb_iter+1):
         plt.show() # remplace le drawnow (normalement)
 
         Mat_or_cor_source = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
-        # print(Mat_or_cor_source)
-        # plt.pause(1)
+
+
+        print(Mat_or_cor_source)
+
 
         Mat_mel_cor = cc.correl_coef_composante_nb(x1,x2) # Calcul de la correlation entre les sources melangees
 
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
-        # plt.pause(5)
+
         # Afficher matrice corr à chaque étape
         # print(Mat_sep_cor)
         print(an.compute_bin_correlation(an.getBinaries(yy1), an.getBinaries(s1)))
