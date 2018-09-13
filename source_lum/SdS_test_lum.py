@@ -5,11 +5,14 @@ import gene_lum as gl
 import gradient as gr
 import correl_coef_composante_nb as cc
 import analyse as an
+import coefs_mélange_fonction_de_la_distance as cm
 
 print('je genere puis concatene les images en vecteur .....')
 
+# Quelques constantes
 nb_bits = 500
 X = range(500)
+D = 0.03
 
 [s1, s2] = gl.gene_lum(nb_bits, 2)
 source1, source2 = s1[:], s2[:]
@@ -22,10 +25,14 @@ s2 = s2/np.std(s2)
 x1_R = s1
 x2_R = s2
 
-A11 = 0.44 # coefficients de mélange
-A12 = 0.56
-A21 = 0.4
-A22 = 0.6
+# A11 = 0.44 # coefficients de mélange
+# A12 = 0.56
+# A21 = 0.4
+# A22 = 0.6
+
+A11, A21, A12, A22 = cm.coefs(D) # coefficients
+print(A11,A21,A12,A22)
+
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
