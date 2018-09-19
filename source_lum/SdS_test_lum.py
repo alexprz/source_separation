@@ -152,6 +152,7 @@ for i in range(nb_iter+1):
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
 
         # Afficher matrice corr à chaque étape
+        print(Mat_mel_cor)
         print(Mat_sep_cor)
 
 plt.figure(1)
