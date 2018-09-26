@@ -44,6 +44,9 @@ A = np.array([[A11, A12],[A21, A22]])
 # Construction du rapport signal sur bruit pour le tracer ensuite
 SNR = []
 
+# Source dont la composante 1 est mise à 0
+Si0 = np.array([np.zeros(nb_bits), source2])
+
 print('je reconstruis les signaux de melanges......')
 xx1 = (x1 - np.min(x1)) / (np.max(x1) - np.min(x1))
 xx2 = (x2 - np.min(x2)) / (np.max(x2) - np.min(x2))
@@ -115,8 +118,6 @@ for i in range(nb_iter+1):
     B[1,0] /= std2
     B[1,1] /= std2
 
-    SNR[i] = sb.rapp_signal_bruit(A,B)
-
     y1=B[0,0]*x1+B[0,1]*x2 # mise a jour d'une estimation des sources separees (approximation des sources avant melange)
     y2=B[1,1]*x2+B[1,0]*x1
 
@@ -128,26 +129,28 @@ for i in range(nb_iter+1):
     y1 = y1-np.mean(y1)
     y2 = y2-np.mean(y2)
 
+    yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1)) # Finalement je reconstruis les signaux ici pour pouvoir regarder le rapport signal / bruit
+    yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
+
+    SNR.append(sb.rapp_signal_bruit(B, A, Si0, yy1))
+
     plt.close() #Affichage
     if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
         indice += 1
-        print('je reconstruis les signaux separes......')
-        yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))
-        yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
         print(np.std(y1))
         print(np.std(y2))
-        plt.figure(5)
-        plt.plot(X,yy1)
-        plt.title('sep1')
-        #colormap
-        #gray
-
-        plt.figure(6)
-        plt.plot(X,yy2)
-        plt.title('sep2')
-        #colormap
-        #gray
-        plt.show() # remplace le drawnow (normalement)
+        # plt.figure(5)
+        # plt.plot(X,yy1)
+        # plt.title('sep1')
+        # #colormap
+        # #gray
+        #
+        # plt.figure(6)
+        # plt.plot(X,yy2)
+        # plt.title('sep2')
+        # #colormap
+        # #gray
+        # plt.show() # remplace le drawnow (normalement)
 
         Mat_or_cor_source = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
 
@@ -164,6 +167,11 @@ for i in range(nb_iter+1):
         print(Mat_sep_cor)
 
 plt.figure(1)
+plt.plot(np.arange(0,nb_iter+1),SNR)
+plt.title("Relation between the signal and the noise as a fonction of the number of iterations")
+plt.show()
+
+plt.figure(2)
 ## Tracé des deux signaux sources
 # plt.subplot(2,2,1)
 # plt.plot(X, yy1, 'r')
