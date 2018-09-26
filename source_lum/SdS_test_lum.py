@@ -6,6 +6,7 @@ import gradient as gr
 import correl_coef_composante_nb as cc
 import analyse as an
 import coefs_mélange_fonction_de_la_distance as cm
+import signal_bruit as sb
 
 print('je genere puis concatene les images en vecteur .....')
 
@@ -36,6 +37,12 @@ print(A11,A21,A12,A22)
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
+
+# Matrice correspondant aux coefficients
+A = np.array([[A11, A12],[A21, A22]])
+
+# Construction du rapport signal sur bruit pour le tracer ensuite
+SNR = []
 
 print('je reconstruis les signaux de melanges......')
 xx1 = (x1 - np.min(x1)) / (np.max(x1) - np.min(x1))
@@ -108,6 +115,7 @@ for i in range(nb_iter+1):
     B[1,0] /= std2
     B[1,1] /= std2
 
+    SNR[i] = sb.rapp_signal_bruit(A,B)
 
     y1=B[0,0]*x1+B[0,1]*x2 # mise a jour d'une estimation des sources separees (approximation des sources avant melange)
     y2=B[1,1]*x2+B[1,0]*x1
