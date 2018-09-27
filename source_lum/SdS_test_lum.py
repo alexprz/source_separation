@@ -41,8 +41,8 @@ x2 = A21 * s1 + A22 * s2
 # Matrice correspondant aux coefficients
 A = np.array([[A11, A12],[A21, A22]])
 
-# Construction du rapport signal sur bruit pour le tracer ensuite
-SNR = []
+# On garde en mémoire les signaux de sortie de l'algorithme à chaque itération
+Y = []
 
 # Source dont la composante 1 est mise à 0
 Si0 = np.array([np.zeros(nb_bits), source2])
@@ -132,7 +132,7 @@ for i in range(nb_iter+1):
     yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1)) # Finalement je reconstruis les signaux ici pour pouvoir regarder le rapport signal / bruit
     yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
 
-    SNR.append(sb.rapp_signal_bruit(B, A, Si0, yy1))
+    Y.append(yy1)
 
     plt.close() #Affichage
     if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
@@ -165,6 +165,11 @@ for i in range(nb_iter+1):
         # Afficher matrice corr à chaque étape
         print(Mat_mel_cor)
         print(Mat_sep_cor)
+
+SNR = []
+
+for i in range(nb_iter+1):
+        SNR.append(sb.rapp_signal_bruit(B, A, Si0, Y[i]))
 
 plt.figure(1)
 plt.plot(np.arange(0,nb_iter+1),SNR)
