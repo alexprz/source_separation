@@ -32,6 +32,7 @@ x2_R = s2
 # A22 = 0.6
 
 A11, A21, A12, A22 = cm.coefs(D) # coefficients
+# A11, A21, A12, A22 = 0.9, 0.1, 0.1, 0.9
 print(A11,A21,A12,A22)
 
 
@@ -41,8 +42,8 @@ x2 = A21 * s1 + A22 * s2
 # Matrice correspondant aux coefficients
 A = np.array([[A11, A12],[A21, A22]])
 
-# On garde en mémoire les signaux de sortie de l'algorithme à chaque itération
-Y = []
+# On construit la liste des rapport signal / bruit
+SNR = []
 
 # Source dont la composante 1 est mise à 0
 Si0 = np.array([np.zeros(nb_bits), source2])
@@ -91,11 +92,11 @@ x2 = x2 / np.std(x2)
 
 print('l algo tourne.......')
 
-nb_iter = 500
+nb_iter = 5000
 
 B = np.eye(2) # Initialisation de la matrice de separation
 
-mu=0.01 #pas dans la descente du gradient
+mu=0.001 #pas dans la descente du gradient
 
 lambda0 = 0. # hyperparametre : parametre de pénalisation : je cherche des sources ayant un ecart constant, ici = 1
 # j'ai du l'appeler lambda0 car lambda est une fonction python
@@ -125,14 +126,15 @@ for i in range(nb_iter+1):
     std2 = np.std(y2)
     y1 = y1/std1
     y2 = y2/std2
+    #
+    # y1 = y1-np.mean(y1)
+    # y2 = y2-np.mean(y2)
+    #
 
-    y1 = y1-np.mean(y1)
-    y2 = y2-np.mean(y2)
+    # yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))
+    # yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
 
-    yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1)) # Finalement je reconstruis les signaux ici pour pouvoir regarder le rapport signal / bruit
-    yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
-
-    Y.append(yy1)
+    SNR.append(sb.rapp_signal_bruit(B, A, source2, y1))
 
     plt.close() #Affichage
     if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
@@ -166,14 +168,15 @@ for i in range(nb_iter+1):
         print(Mat_mel_cor)
         print(Mat_sep_cor)
 
-SNR = []
 
-for i in range(nb_iter+1):
-        SNR.append(sb.rapp_signal_bruit(B, A, Si0, Y[i]))
+yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))
+yy2=(y2-np.min(y2))/(np.max(y2)-np.min(y2))
 
 plt.figure(1)
 plt.plot(np.arange(0,nb_iter+1),SNR)
-plt.title("Relation between the signal and the noise as a fonction of the number of iterations")
+plt.title("Sound to Noise Ratio as a fonction of the number of iterations")
+plt.xlabel("iterations")
+plt.ylabel("SNR (dB)")
 plt.show()
 
 plt.figure(2)

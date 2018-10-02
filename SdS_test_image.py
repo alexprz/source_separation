@@ -5,12 +5,14 @@ import gene_image as gi
 import gradient as gr
 import correl_coef_composante_nb as cc
 import recons_images_test_nb as ri
+import signal_bruit as sb
 
 print('je genere puis concatene les images en vecteur .....')
 
 s1, s2, nb_lign, nb_col, image_source1, image_source2 = gi.gene_image()
 s1 = s1 - np.mean(s1) # espérance nulle
 s2 = s2 - np.mean(s2)
+source2 = s2[:]
 
 ##std signifie écart type (ou norme de vecteurs aléatoites)
 s1 = s1/np.std(s1) # on ramène s1 et s2 à une norme de valeur 1
@@ -24,6 +26,8 @@ A22 = 0.55
 
 x1 = A11 * s1 + A12 * s2
 x2 = A21 * s1 + A22 * s2
+
+A = np.array([[A11, A12],[A21, A22]])
 
 print('je reconstruis les images de melanges......')
 xx1 = (x1 - np.min(x1)) / (np.max(x1) - np.min(x1)) * 255
@@ -62,6 +66,8 @@ plt.title('mel2')
 ##gray
 plt.show()
 
+SNR = []
+
 x1 = x1 - np.mean(x1) # espérance nulle
 x2 = x2 - np.mean(x2)
 
@@ -74,7 +80,7 @@ nb_iter = 1000
 
 B = np.eye(2) # Initialisation de la matrice de separation
 
-mu=0.01 #pas dans la descente du gradient
+mu=0.1 #pas dans la descente du gradient
 
 lambda0 = 0. # hyperparametre : parametre de pénalisation : je cherche des sources ayant un ecart constant, ici = 1
 # j'ai du l'appeler lambda0 car lambda est une fonction python
@@ -109,8 +115,12 @@ for i in range(nb_iter+1):
     y1 = y1-np.mean(y1)
     y2 = y2-np.mean(y2)
 
+    # SNR.append(sb.rapp_signal_bruit(B, A, source2, y1))
+    residu = (B[0,0]*A[0,1]+B[0,1]*A[1,1])*source2
+    SNR.append(10*np.log10(np.mean(y1*y1)/np.mean(residu*residu)))
+
     plt.close() #Affichage
-    if(i==indice*100): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
+    if(i==indice*500): # on affiche les images qui se "démélangent" toutes les 100 itérations et on recalcule la corrélation
         indice += 1
         print('je reconstruis les images separees......')
         yy1=(y1-np.min(y1))/(np.max(y1)-np.min(y1))*255
@@ -132,11 +142,14 @@ for i in range(nb_iter+1):
         plt.show() # remplace le drawnow (normalement)
 
         Mat_or_cor_source = cc.correl_coef_composante_nb(s1,s2) # Calcul de la correlation entre les sources avant melange
-        plt.pause(1)
 
         Mat_mel_cor = cc.correl_coef_composante_nb(x1,x2) # Calcul de la correlation entre les sources melangees
 
         Mat_sep_cor = cc.correl_coef_composante_nb(y1,y2) # Calcul de la correlation entre les sources separees
-        plt.pause(5)
         # Afficher matrice corr à chaque étape
         print(Mat_sep_cor)
+
+plt.figure(1)
+plt.plot(np.arange(0,nb_iter+1),SNR)
+plt.title("Relation between the signal and the noise as a fonction of the number of iterations")
+plt.show()
